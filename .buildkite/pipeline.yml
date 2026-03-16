@@ -21,9 +21,7 @@ steps:
         exit 1
       fi
     secrets:
-      - ANALYTICS_TOKEN
-    env:
-      BUILDKITE_ANALYTICS_TOKEN: ${ANALYTICS_TOKEN}
+      BUILDKITE_ANALYTICS_TOKEN: ANALYTICS_TOKEN
     plugins:
       - github.com/buildkite-plugins/test-collector-buildkite-plugin#v1.10.2:
           files: "**/test*.xml"
