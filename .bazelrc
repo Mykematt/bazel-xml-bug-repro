@@ -1,0 +1,3 @@
+common:ci --remote_cache=grpc://localhost:9090
+common:ci --remote_download_minimal
+common:ci --experimental_split_xml_generation

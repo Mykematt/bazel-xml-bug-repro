@@ -1,0 +1,27 @@
+---
+steps:
+  - key: bazel-test-xml-bug-repro
+    label: ":bazel: Test XML bug repro"
+    command: |
+      set -eu
+      rm -rf testlogs
+      bazel clean
+      bazel test --config=ci --noexperimental_split_xml_generation //...
+      mkdir -p testlogs
+      cp -rL bazel-testlogs/* testlogs/
+      echo "--- XML files found:"
+      find testlogs/ -name "test.xml" | sort
+      count=$(find testlogs/ -name "test.xml" | wc -l | tr -d ' ')
+      echo "Total: $count test.xml files"
+      if [ "$count" -ne 4 ]; then
+        echo "FAIL: Expected 4 test.xml files, got $count"
+        exit 1
+      fi
+    plugins:
+      - github.com/buildkite-plugins/test-collector-buildkite-plugin#v1.10.2:
+          files: "**/test*.xml"
+          format: junit
+          base-path: testlogs
+          missing-error: 0
+          follow-symlinks: true
+          upload-concurrency: 50
