@@ -2,6 +2,8 @@
 steps:
   - key: bazel-test-xml-bug-repro
     label: ":bazel: Test XML bug repro"
+    agents:
+      queue: mac
     command: |
       set -eu
       rm -rf testlogs
