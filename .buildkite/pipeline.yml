@@ -9,15 +9,15 @@ steps:
       set -eu
       rm -rf testlogs
       bazel clean
-      bazel test --config=ci --noexperimental_split_xml_generation //...
+      bazel test --config=ci //...
       mkdir -p testlogs
-      cp -rL bazel-testlogs/* testlogs/
+      cp -rL bazel-testlogs/* testlogs/ || true
       echo "--- XML files found:"
       find testlogs/ -name "test.xml" | sort
-      count=$(find testlogs/ -name "test.xml" | wc -l | tr -d ' ')
-      echo "Total: $count test.xml files"
-      if [ "$count" -ne 4 ]; then
-        echo "FAIL: Expected 4 test.xml files, got $count"
+      count="$(find testlogs/ -name 'test.xml' | wc -l | xargs)"
+      echo "Total: ${count} test.xml files"
+      if [ "${count}" -ne 4 ]; then
+        echo "FAIL: Expected 4 test.xml files, got ${count}"
         exit 1
       fi
     secrets:
